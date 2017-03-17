@@ -15,6 +15,8 @@ var ue = require('./routes/ue');
 var logger = require('./utility/logger');
 var passport = require('passport');
 var i18n = require('./models/i18n');
+var MongoStore = require('connect-mongo')(session);
+var config = require('./config/common');
 
 var app = express();
 
@@ -32,7 +34,8 @@ app.use(cookieParser());
 app.use(i18n.init);
 
 app.use(session({
-    secret: 'iblog-exp-session',
+    secret: config.session_secret,
+    store: new MongoStore({url: config.db}),
     cookie: {
         maxAge: 24 * 60 * 60 * 1000
     },
